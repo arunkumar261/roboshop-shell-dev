@@ -1,5 +1,6 @@
 #!/bin/bash
 
+#mongodb setup for roboshop project 
 ID=$(date -u)
 
 R="\e[31m"
