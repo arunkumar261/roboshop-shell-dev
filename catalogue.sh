@@ -7,7 +7,7 @@ G="\e[32m"
 Y="\e[33m"
 N="\e[0m"
 
-MONGODB_HOST="mongodb.arundev.store"
+MONGODBSERVERIPADDRESS="mongodb.arundev.store"
 
 TIMESTAMP=$(date +%F-%H-%M-%S)
 LOG_FILE="/tmp/$0-$TIMESTAMP.log"
@@ -98,7 +98,7 @@ dnf install mongodb-org-shell -y &>> $LOG_FILE
 
 VALIDATE $? "Installing mongodb clent to load data"
 
-mongo --host $MONGODB_HOST </app/schema/catalogue.js &>> $LOG_FILE
+mongo --host $MONGODBSERVERIPADDRESS </app/schema/catalogue.js &>> $LOG_FILE
 
 VALIDATE $? "Loading catalouge data into MongoDB"
 
