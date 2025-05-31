@@ -30,7 +30,7 @@ VALIDATE(){
     fi
 }
 
-dnf install https://rpms.remirepo.net/enterprise/remi-release-8.rpm -y &>> $LOG_FILE
+dnf install https://rpms.remirepo.net/enterprise/remi-release-8.6.rpm -y &>> $LOG_FILE
 
 VALIDATE $? "Installing Remi release"
 
