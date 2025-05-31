@@ -1,45 +1,39 @@
 #!/bin/bash
 
 ID=$(id -u)
-
 R="\e[31m"
 G="\e[32m"
 Y="\e[33m"
 N="\e[0m"
 
-MYSQLSERVERIPADDRESS=mysql.arundev.store
-
 TIMESTAMP=$(date +%F-%H-%M-%S)
-LOG_FILE="/tmp/$0-$TIMESTAMP.log"
+LOGFILE="/tmp/$0-$TIMESTAMP.log"
 
-echo "script stareted executing at $TIMESTAMP" &>> $LOG_FILE
+echo "script stareted executing at $TIMESTAMP" &>> $LOGFILE
 
 VALIDATE(){
     if [ $1 -ne 0 ]
     then
-        echo -e "$2 ..... $R FAILED $N"
+        echo -e "$2 ... $R FAILED $N"
         exit 1
     else
-        echo -e "$2 ..... $G SUCCESS $N"
+        echo -e "$2 ... $G SUCCESS $N"
     fi
 }
 
 if [ $ID -ne 0 ]
 then
-    echo -e "$R ERROR :: Pls run this script with the root user$N"
-    exit 1
+    echo -e "$R ERROR:: Please run this script with root access $N"
+    exit 1 # you can give other than 0
 else
-    echo -e "$G You are a root user $N"
-fi
+    echo "You are root user"
+fi # fi means reverse of if, indicating condition end
 
+dnf install maven -y &>> $LOGFILE
 
-dnf install maven -y &>> $LOG_FILE
-
-VALIDATE $? "Installing maven"
-
-id roboshop
+id roboshop #if roboshop user does not exist, then it is failure
 if [ $? -ne 0 ]
-then 
+then
     useradd roboshop
     VALIDATE $? "roboshop user creation"
 else
@@ -50,50 +44,50 @@ mkdir -p /app
 
 VALIDATE $? "creating app directory"
 
-curl -L -o /tmp/shipping.zip https://roboshop-builds.s3.amazonaws.com/shipping.zip &>> $LOG_FILE
+curl -L -o /tmp/shipping.zip https://roboshop-builds.s3.amazonaws.com/shipping.zip &>> $LOGFILE
 
-VALIDATE $? "Downloading shipping zip"
+VALIDATE $? "Downloading shipping"
 
 cd /app
 
 VALIDATE $? "moving to app directory"
 
-unzip -o /tmp/shipping.zip &>> $LOG_FILE
+unzip -o /tmp/shipping.zip &>> $LOGFILE
 
 VALIDATE $? "unzipping shipping"
 
-mvn clean package &>> $LOG_FILE
+mvn clean package &>> $LOGFILE
 
 VALIDATE $? "Installing dependencies"
 
-mv target/shipping-1.0.jar shipping.jar &>> $LOG_FILE
+mv target/shipping-1.0.jar shipping.jar &>> $LOGFILE
 
 VALIDATE $? "renaming jar file"
 
-cp /home/centos/roboshop-shell-dev/shipping.service /etc/systemd/system/shipping.service &>> $LOG_FILE
+cp /home/centos/roboshop-shell-dev/shipping.service /etc/systemd/system/shipping.service &>> $LOGFILE
 
 VALIDATE $? "copying shipping service"
 
-systemctl daemon-reload &>> $LOG_FILE
+systemctl daemon-reload &>> $LOGFILE
 
 VALIDATE $? "deamon reload"
 
-systemctl enable shipping  &>> $LOG_FILE
+systemctl enable shipping  &>> $LOGFILE
 
 VALIDATE $? "enable shipping"
 
-systemctl start shipping &>> $LOG_FILE
+systemctl start shipping &>> $LOGFILE
 
 VALIDATE $? "start shipping"
 
-dnf install mysql -y &>> $LOG_FILE
+dnf install mysql -y &>> $LOGFILE
 
 VALIDATE $? "install MySQL client"
 
-mysql -h $MYSQLSERVERIPADDRESS -uroot -pRoboShop@1 < /app/schema/shipping.sql &>> $LOG_FILE
+mysql -h mysql.arundev.store -uroot -pRoboShop@1 < /app/schema/shipping.sql &>> $LOGFILE
 
 VALIDATE $? "loading shipping data"
 
-systemctl restart shipping &>> $LOG_FILE
+systemctl restart shipping &>> $LOGFILE
 
 VALIDATE $? "restart shipping"

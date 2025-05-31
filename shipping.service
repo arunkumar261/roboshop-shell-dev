@@ -3,7 +3,7 @@ Description=Shipping Service
 
 [Service]
 User=roboshop
-Environment=CART_ENDPOINT=cart.arundev.store
+Environment=CART_ENDPOINT=cart.arundev.store:8080
 Environment=DB_HOST=mysql.arundev.store
 ExecStart=/bin/java -jar /app/shipping.jar
 SyslogIdentifier=shipping
