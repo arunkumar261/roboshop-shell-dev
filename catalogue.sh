@@ -74,7 +74,7 @@ npm install &>> $LOG_FILE
 VALIDATE $? "Installing dependencies"
 
 # use absolute, because catalogue.service exists there
-cd /home/centos/roboshop-shell-dev/catalogue.service /etc/systemd/system/catalogue.service &>> $LOG_FILE
+cp /home/centos/roboshop-shell-dev/catalogue.service /etc/systemd/system/catalogue.service &>> $LOG_FILE
 
 VALIDATE $? "Copying catalogue service file"
 
