@@ -7,6 +7,8 @@ G="\e[32m"
 Y="\e[33m"
 N="\e[0m"
 
+MYSQLSERVERIPADDRESS=mysql.arundev.store
+
 TIMESTAMP=$(date +%F-%H-%M-%S)
 LOG_FILE="/tmp/$0-$TIMESTAMP.log"
 
@@ -31,7 +33,7 @@ else
 fi
 
 
-dnf install maven -y
+dnf install maven -y &>> $LOG_FILE
 
 VALIDATE $? "Installing maven"
 
@@ -87,7 +89,7 @@ dnf install mysql -y &>> $LOG_FILE
 
 VALIDATE $? "install MySQL client"
 
-mysql -h mysql.daws76s.online -uroot -pRoboShop@1 < /app/schema/shipping.sql &>> $LOG_FILE
+mysql -h $MYSQLSERVERIPADDRESS -uroot -pRoboShop@1 < /app/schema/shipping.sql &>> $LOG_FILE
 
 VALIDATE $? "loading shipping data"
 
