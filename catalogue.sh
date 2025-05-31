@@ -7,7 +7,7 @@ G="\e[32m"
 Y="\e[33m"
 N="\e[0m"
 
-MONGODBSERVERIPADDRESS="mongodb.arundev.store"
+MONGODBSERVERIPADDRESS=mongodb.arundev.store
 
 TIMESTAMP=$(date +%F-%H-%M-%S)
 LOG_FILE="/tmp/$0-$TIMESTAMP.log"
