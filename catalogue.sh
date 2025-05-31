@@ -36,7 +36,7 @@ dnf module disable nodejs -y &>> $LOG_FILE
 
 VALIDATE $? "Disabling default nodejs version"
 
-dnf modue enable nodejs:18 -y &>> $LOG_FILE
+dnf module enable nodejs:18 -y &>> $LOG_FILE
 
 VALIDATE $? "Enabling specific nodejs version"
 
