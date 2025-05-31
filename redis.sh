@@ -42,7 +42,7 @@ dnf install redis -y &>> $LOG_FILE
 
 VALIDATE $? "Installing redis module"
 
-sed -i "/s/127.0.0.1/0.0.0.0/g" /etc/redis/redis.conf &>> $LOG_FILE
+sed -i "s/127.0.0.1/0.0.0.0/g" /etc/redis/redis.conf &>> $LOG_FILE
 
 VALIDATE $? "allowing remote connections"
 
