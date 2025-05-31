@@ -12,7 +12,7 @@ MONGODBSERVERIPADDRESS="mongodb.arundev.store"
 TIMESTAMP=$(date +%F-%H-%M-%S)
 LOG_FILE="/tmp/$0-$TIMESTAMP.log"
 
-echo "script stareted executing at $TIMESTAMP" &>> $LOGFILE
+echo "script stareted executing at $TIMESTAMP" &>> $LOG_FILE
 
 VALIDATE(){
     if [ $1 -ne 0 ]
@@ -24,7 +24,7 @@ VALIDATE(){
     fi
 }
 
-if [ $ID -ne 0]
+if [ $ID -ne 0 ]
 then
     echo -e "$R ERROR :: Pls run this with root user $N"
     exit 1
