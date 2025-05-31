@@ -37,6 +37,7 @@ dnf install maven -y &>> $LOG_FILE
 
 VALIDATE $? "Installing maven"
 
+id roboshop
 if [ $? -ne 0 ]
 then 
     useradd roboshop
@@ -51,7 +52,7 @@ VALIDATE $? "creating app directory"
 
 curl -L -o /tmp/shipping.zip https://roboshop-builds.s3.amazonaws.com/shipping.zip &>> $LOG_FILE
 
-VALIDATE $? "Downloading shipping"
+VALIDATE $? "Downloading shipping zip"
 
 cd /app
 
