@@ -9,6 +9,7 @@ DOMAIN_NAME="arundev.store"
 
 for i in "${INSTANCES[@]}"
 do
+    echo "$i : $IP_ADDRESS"
     if [ $i == "mongodb" ] || [ $i == "mysql" ] || [ $i == "shipping" ]
     then
         INSTANCE_TYPE="t3.small"
