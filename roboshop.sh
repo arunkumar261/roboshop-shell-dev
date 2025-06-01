@@ -16,7 +16,7 @@ do
         INSTANCE_TYPE="t2.micro"
     fi
 
-    INSTANCE_INFO=$(aws ec2 run-instances --image-id $AMI_ID --instance-type $INSTANCE_TYPE --security-group-ids $SG_ID --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$i}]" --query 'Instances[0].PrivateIpAddress' --output text)
+    IP_ADDRESS=$(aws ec2 run-instances --image-id $AMI_ID --instance-type $INSTANCE_TYPE --security-group-ids $SG_ID --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$i}]" --query 'Instances[0].PrivateIpAddress' --output text)
 
 
 # " --query 'Instances[0].[InstanceId,PrivateIpAddress,PublicIpAddress]' --output text)
@@ -45,7 +45,7 @@ do
             ,"Type"             : "A"
             ,"TTL"              : 1
             ,"ResourceRecords"  : [{
-                "Value"         : "'$RECORD_IP'"
+                "Value"         : "'$IP_ADDRESS'"
             }]
         }
         }]
