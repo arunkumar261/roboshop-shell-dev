@@ -1,13 +1,13 @@
 #!/bin/bash
 
-AMI_ID=ami-0b4f379183e5706b9
-SG_ID=sg-0dccc737241e3f233
-INSTANCES=("mongdb" "redis" "mysql" "rabbitmq" "catalogue" "user" "cart" "shipping" "payment" "dispatch" "web")
-
+AMI=ami-0b4f379183e5706b9 #this keeps on changing
+SG_ID=sg-0dccc737241e3f233 #replace with your SG ID
+INSTANCES=("mongodb" "redis" "mysql" "rabbitmq" "catalogue" "user" "cart" "shipping" "payment" "dispatch" "web")
+ZONE_ID=Z00836682TJ775V3EAIOJ # replace your zone ID
+DOMAIN_NAME="arundev.store"
 
 for i in "${INSTANCES[@]}"
 do
-    echo "instance is : $i"
     if [ $i == "mongodb" ] || [ $i == "mysql" ] || [ $i == "shipping" ]
     then
         INSTANCE_TYPE="t3.small"
@@ -15,5 +15,26 @@ do
         INSTANCE_TYPE="t2.micro"
     fi
 
-    aws ec2 run-instances --image-id $AMI_ID --instance-type $INSTANCE_TYPE --security-group-ids $SG_ID --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$i}]" 
+    IP_ADDRESS=$(aws ec2 run-instances --image-id $AMI --instance-type $INSTANCE_TYPE --security-group-ids sg-0dccc737241e3f233 --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$i}]" --query 'Instances[0].PrivateIpAddress' --output text)
+    echo "$i: $IP_ADDRESS"
+
+    #create R53 record, make sure you delete existing record
+    aws route53 change-resource-record-sets \
+    --hosted-zone-id $ZONE_ID \
+    --change-batch '
+    {
+        "Comment": "Creating a record set for cognito endpoint"
+        ,"Changes": [{
+        "Action"              : "CREATE"
+        ,"ResourceRecordSet"  : {
+            "Name"              : "'$i'.'$DOMAIN_NAME'"
+            ,"Type"             : "A"
+            ,"TTL"              : 1
+            ,"ResourceRecords"  : [{
+                "Value"         : "'$IP_ADDRESS'"
+            }]
+        }
+        }]
+    }
+        '
 done
