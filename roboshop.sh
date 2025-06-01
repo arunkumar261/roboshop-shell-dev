@@ -2,7 +2,7 @@
 
 AMI_ID=ami-0b4f379183e5706b9
 SG_ID=sg-0dccc737241e3f233
-INSTANCES=("mongdb","redis","mysql","rabbitmq","catalogue","user","cart","shipping","payment","dispatch","web" )
+INSTANCES=("mongdb" "redis" "mysql" "rabbitmq" "catalogue" "user" "cart" "shipping" "payment" "dispatch" "web" )
 
 
 for i in "${INSTANCES[@]}"
