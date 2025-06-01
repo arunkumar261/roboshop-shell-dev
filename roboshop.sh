@@ -32,6 +32,7 @@ do
     # else
     #     RECORD_IP=$PRIVATE_IP
     # fi
+    # "Value"         : "'$RECORD_IP'"
 
     aws route53 change-resource-record-sets \
     --hosted-zone-id $ZONE_ID \
