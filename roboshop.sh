@@ -16,20 +16,22 @@ do
         INSTANCE_TYPE="t2.micro"
     fi
 
-    INSTANCE_INFO=$(aws ec2 run-instances --image-id $AMI_ID --instance-type $INSTANCE_TYPE --security-group-ids $SG_ID --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$i}]" --query 'Instances[0].[InstanceId,PrivateIpAddress,PublicIpAddress]' --output text)
+    INSTANCE_INFO=$(aws ec2 run-instances --image-id $AMI_ID --instance-type $INSTANCE_TYPE --security-group-ids $SG_ID --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$i}]" --query 'Instances[0].PrivateIpAddress' --output text)
 
-    echo "$i : $IP_ADDRESS"
 
-    read INSTANCE_ID PRIVATE_IP PUBLIC_IP <<< "$INSTANCE_INFO"
+# " --query 'Instances[0].[InstanceId,PrivateIpAddress,PublicIpAddress]' --output text)
+    # echo "$i : $IP_ADDRESS"
 
-    echo "$i => PRIVATE: $PRIVATE_IP | PUBLIC: $PUBLIC_IP"
+    # read INSTANCE_ID PRIVATE_IP PUBLIC_IP <<< "$INSTANCE_INFO"
 
-    if [ $i == "web" ]
-    then
-        RECORD_IP=$PUBLIC_IP
-    else
-        RECORD_IP=$PRIVATE_IP
-    fi
+    # echo "$i => PRIVATE: $PRIVATE_IP | PUBLIC: $PUBLIC_IP"
+
+    # if [ $i == "web" ]
+    # then
+    #     RECORD_IP=$PUBLIC_IP
+    # else
+    #     RECORD_IP=$PRIVATE_IP
+    # fi
 
     aws route53 change-resource-record-sets \
     --hosted-zone-id $ZONE_ID \
